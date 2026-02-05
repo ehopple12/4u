@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <title>LetMeBeDelusional</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playwrite+IN+Guides&display=swap" rel="stylesheet">
+<style>
+    :root{
+        --bg: #070711;
+        --panel: rgba(12, 10, 30, 0.96);
+        --border: rgba(220, 210, 210, 0.24);
+        --text: #fdfcff;
+        --muted: rgba(234, 220, 220, 0.84);
+        --soft: rgba(255,255,255,0.18);
+        --neon1: rgba(212, 30, 212, 0.97);
+        --neon2: rgba(35, 211, 211, 0.97);
+        --neon3: rgb(251, 148, 165);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+        margin:0;
+        background:
+            radial-gradient(1100px 700px at 20% 10%, rgba(124,58,237), transparent 55%),
+            radial-gradient(900px 500px at 80% 30%, rgba(34,211,238), transparent 60%),
+            radial-gradient(700px 500px at 90% 50%, rgba(251,113,133), transparent 65%),
+            var(--bg);
+        color: var(--text);
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        overflow-x: hidden;
+    }
+    .wrap{
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding: 25px;
+    }
+    .panel{
+        width:min(700px, 100%);
+        border: 1px solid var(--border);
+        background: linear-gradient(145deg, rgba(4,4,12,0.96), rgba(40,10,70,0.96));
+        backdrop-filter: blur(16px);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(124,58,237,0.4);
+        position: relative;
+    }
+    .panel--center{
+        text-align:center;
+        padding: 42px 28px;
+    }
+    .glow{
+        position:absolute;
+        inset: -120px auto auto -120px;
+        width: 250px;
+        height:250px;
+        border-radius:999px;
+        filter:blur(20px);
+        background:radial-gradient(circle at 40% 40%, rgba(124,58,237), transparent 60%),
+                   radial-gradient(circle at 60% 60%, rgba(34,211,238), transparent 60%);
+        opacity: 0.9;
+        pointer-events: none;
+    }
+    .header{
+        letter-spacing:0.22em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-size: 12px;
+        margin: 0 0 10px;
+    }
+    .title{
+        font-size: clamp(30px, 5vw, 50px);
+        line-height:1.1;
+        margin: 0 0 12px;
+    }
+    .sub{
+        margin:0 0 25px;
+        color: var(--muted);
+        font-size: 15px;
+    }
+    .row{
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .btn{
+        border-radius:999px;
+        padding:12px 18px;
+        border: 1px solid var(--border);
+        background:rgba(255,255,255,0.5);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+    }
+    .btn:active{transform: translateY(1px) scale(0.99);}
+    
+    .btn--primary{
+        border-color:rgba(34,211,238);
+        background: linear-gradient(90deg, rgba(124,58,237), rgba(34,211,238));
+        box-shadow: 0 14px 40px rgba(124,58,237);
+    }
+    .btn--primary:hover{
+        box-shadow: 0 18px 55px rgba(34,211,238);
+        border-color: rgba(34,211,238);
+    }
+    .btn--ghost:hover{
+        border-color: rgba(251,113,133);
+        box-shadow: 0 18px 55px rgba(251,113,133);
+    }
+    .small{
+        margin: 18px 0 0;
+        color: rgba(255,255,255,0.52);
+        font-size: 12px;
+    }
+
+    .hidden{display:none !important;}
+
+    .revealed-head{
+        display:flex;
+        flex-direction:column;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .badge{
+        align-self:flex-start;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.4);
+        color: var(--muted);
+        font-size: 13px;
+    }
+    .revealed-title{
+        margin:0;
+        font-size: 30px;
+    }
+    .revealed-sub{
+        margin:0;
+        color:var(--muted);
+    }
+    .cards{
+        display:grid;
+        gap: 12px;
+        margin:18px 0 18px;
+    }
+    .card{
+        border:1px solid var(--border);
+        background: rgba(7, 7, 20, 0.95);
+        border-radius: 18px;
+        padding:16px 16px;
+        color: var(--text);
+        box-shadow: 0 0 20px rgba(124,58,237,0.35);
+        opacity:0;
+        transform: translateY(20px);
+        transition: opacity .35s ease, transform .35s ease, box-shadow .25s ease;
+    }
+    .card.show{
+            opacity:1;
+            transform: translateY(0);
+    }
+    .controls{
+            display:flex;
+            gap: 12px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+    }
+    #Final{
+        margin-top: 18px;
+        padding-top:18px;
+        border-top: 1px solid var(--soft);
+    }
+    .final-text{
+        margin: 0 0 12px;
+        color: var(--muted);
+    }
+    .result{
+        margin: 12px 0 0;
+        color: rgba(255,255,255,0.82);
+    }
+    .final-images{
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    .final-images img{
+        max-width: 100%;
+        border-radius: 18px;
+        box-shadow: 0 0 25px rgba(124,58,237,0.55);
+        border: 1px solid rgba(255,255,255,0.18);
+    }
+    .confetti{
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 999;
+    }
+    .confetti-piece{
+        position: absolute;
+        width: 10px;
+        height: 16px;
+        opacity: 0.9;
+        animation: fall linear forwards;
+        transform: translateY(-20px) rotate(0deg);
+        border-radius: 3px;
+    }
+    @keyframes fall {
+        0% { transform: translateY(-20px) rotate(0deg); }
+        100% { transform: translateY(110vh) rotate(360deg); }
+    }
+</style>
+    </head>
+    <body>
+        <div id="confetti" class="confetti hidden" aria-hidden="true"></div>
+        <main class="wrap">
+        <section id="landing" class="panel panel--center">
+            <div class="glow"></div>
+
+                <p class="header">Hear me out...</p>
+                <h1 class="title">I'm Him</h1>
+                <p class="sub">IDGAF if ts corny. Also ik you aint expect me to pull this out my ass LMFAO. But guess what I taught myself ts(AI def helped me bc i learned ts a min ago and i forgot a lot, but I wrote all of this ai just fixed it. oh and helped me with one thing. FUCK CONFETTI) Anyways, do you even fwm fr??</p>
+
+                <div class="row">
+                    <button id="yesBtn" class="btn btn--primary">Yes 😌</button>
+                    <button id="noBtn" class="btn btn--ghost">No :(</button>
+                </div>
+
+                <p class="small">Reality is the sum of our decisions, choosing will determine your fate.</p>
+            
+        </section>
+
+        <section id="majic" class="panel hidden">
+            <header class="revealed-head">
+                <div class="badge" id="choiceBadge">Your choice: </div>
+                <h2 class="revealed-title">Why i should be ur bff (gimme a chance, I'll fight a dragon for u)</h2>
+                <p class="revealed-sub">Press next to see the reasons</p>
+            </header>
+
+            <div class="cards" id="reason-cards">
+                <div class="card hidden reason">I'm literally Chinese</div>
+                <div class="card hidden reason">I'm funny af</div>
+                <div class="card hidden reason">I'm an autisim</div>
+                <div class="card hidden reason">smart (3.5 gpa #dean's list)</div>
+                <div class="card hidden reason">i got hella bread (I've prepared land, cattle, and a year supply of food for a bride price)</div>
+                <div class="card hidden reason">My music is peak, whether it's drill, jazz, pop, my music is just unstoppable.(Put me on to house music pls speed i need this)</div>
+                <div class="card hidden reason">jack of all trades, master of none. I'm versatile</div>
+                <div class="card hidden reason">I literally can speak 4 languages</div>
+                <div class="card hidden reason">will learn anything</div>
+                <div class="card hidden reason">Can be a breadwinner or a good boy idc</div>
+                <div class="card hidden reason">I'm just so versatile no one can stop me.</div>
+                <div class="card hidden reason">I'm humble I swear.</div>
+                <div class="card hidden reason">Pattern recognition</div>
+                <div class="card hidden reason">I made this</div>
+                <div class="card hidden reason">I have a big weiner</div>
+                <div class="card hidden reason">I travel, whether it's luxury or cheap backpacking</div>
+                <div class="card hidden reason">made it out the trap (deadass my parents were dirt poor :( don't feel bad just demonstrating my work ethic)</div>
+                <div class="card hidden reason">I work harder than you might think</div>
+                <div class="card hidden reason">13 pull ups.</div>
+                <div class="card hidden reason">I have abs</div>
+                <div class="card hidden reason">I watch anime when I'm bored tf</div>
+                <div class="card hidden reason">I read books, who tf reads books</div>
+                <div class="card hidden reason">my reels are funny(if you ever would look at them, #lameee)</div>
+                <div class="card hidden reason">My height starts with a 6</div>
+                <div class="card hidden reason">I'm nice to evb, especially people idek</div>
+                <div class="card hidden reason">I'm always willing to sacrifice something that may damage myself (and only myself) for the sake of a friend</div>
+                <div class="card hidden reason">I like to party, buttt not everyday</div>
+                <div class="card hidden reason">I'm morally competent </div>
+                <div class="card hidden reason">When I make plans, I follow through, I'm no flake. ts kills me</div>
+                <div class="card hidden reason">Neutral in fights and politics</div>
+                <div class="card hidden reason">I can deadass throw down.</div>
+                <div class="card hidden reason">Lover boy/ yearner</div>
+                <div class="card hidden reason">I love coffee</div>
+                <div class="card hidden reason">I'llcome to you.</div>
+                <div class="card hidden reason">understanding, i like to listen to people yap and yap back at them</div>
+                <div class="card hidden reason">Greatful(If you made it this far I'm impressed tbh. thanks for reading my prideful gloat about myself).</div>
+                <div class="card hidden reason">This actually disgusts me a little, but let me be delusional</div>
+                <div class="card hidden reason">I critique myself more than anyone else ever will.</div>
+                <div class="card hidden reason">My biggest enemy is myself</div>
+            </div>
+
+            <div class="controls" id="reason-controls">
+                <button id="skipBtn" class="btn btn--primary">see all</button>
+                <button id="nextBtn" class="btn btn--ghost">Next</button>
+            </div>
+
+            <div id="Final" class="hidden">
+                <p class="final-text">So, we don't wanna waste time, but a minute with you is definitely not wasted in my opinion. Just some final remarks ig. You're cool, whether it's as friends or a s/o, I wanna stay in contact w you(2-3 business days max). Idk maybe this is all wasted effort, but I'm gonna at least try to get what I want with this life, so what's wrong with wanting to have company with you.</p>
+                <div class="row" id="final-actions">
+                    <button id="text-me" class="btn btn--primary">im always available(probably)."</button>
+                    <button id="lame" class="btn btn--ghost">Just respect. keep yo peace wasian shyt, sucks you won't even be my friend. Ah well.</button>
+                </div>
+                <p id="result" class="result"></p>
+                <div id="final-images" class="final-images hidden"></div>
+            </div>
+        </section>
+        </main>
+    <script>
+       const landing = document.getElementById("landing");
+       const reveal = document.getElementById("majic");
+       const yesBtn = document.getElementById("yesBtn");
+       const noBtn = document.getElementById("noBtn");
+       const choiceBadge = document.getElementById("choiceBadge");
+       const nextBtn = document.getElementById("nextBtn");
+       const skipBtn = document.getElementById("skipBtn");
+       const reasons = document.querySelectorAll(".reason");
+       const Final = document.getElementById("Final");
+       const finalImages = document.getElementById("final-images");
+       const finalActions = document.getElementById("final-actions");
+       const reasonControls = document.getElementById("reason-controls");
+       const reasonCards = document.getElementById("reason-cards");
+       const confetti = document.getElementById("confetti");
+       const textMe = document.getElementById("text-me");
+       const lame = document.getElementById("lame");
+       const result = document.getElementById("result");
+       let idx = 0;
+
+       function resetReasons() {
+           idx = 0;
+           reasons.forEach(card => {
+               card.classList.add("hidden");
+               card.classList.remove("show");
+           });
+           Final.classList.add("hidden");
+           result.textContent = "";
+           finalImages.classList.add("hidden");
+           finalImages.innerHTML = "";
+           finalActions.classList.remove("hidden");
+           reasonControls.classList.remove("hidden");
+           reasonCards.classList.remove("hidden");
+           confetti.classList.add("hidden");
+           confetti.innerHTML = "";
+       }
+
+       function startReveal(choiceText){
+           landing.classList.add("hidden");
+           reveal.classList.remove("hidden");
+           choiceBadge.textContent = `You chose: ${choiceText}`;
+           resetReasons();
+       }
+
+       function showNextReason(){
+           if (idx < reasons.length){
+               const card = reasons[idx];
+               card.classList.remove("hidden");
+               requestAnimationFrame(()=> card.classList.add("show"));
+               idx++;
+               if (idx >= reasons.length){
+                   Final.classList.remove("hidden");
+               }
+           }
+       }
+
+       function showAllReasons(){
+           while (idx < reasons.length) {
+               showNextReason();
+           }
+       }
+
+       yesBtn.addEventListener("click", ()=> startReveal("Yes 😌"));
+       noBtn.addEventListener("click", ()=> startReveal("No :("));
+       nextBtn.addEventListener("click", showNextReason);
+       skipBtn.addEventListener("click", showAllReasons);
+
+       function hideButtonsShowFinal(){
+           finalActions.classList.add("hidden");
+           reasonControls.classList.add("hidden");
+           reasonCards.classList.add("hidden");
+       }
+
+       function runConfetti(){
+           confetti.innerHTML = "";
+           confetti.classList.remove("hidden");
+           const colors = ["#7c3aed", "#22d3ee", "#fb7185", "#fdfcff", "#fbbf24"];
+           const count = 1420;
+           for (let i = 0; i < count; i++) {
+               const piece = document.createElement("div");
+               piece.className = "confetti-piece";
+               const size = Math.random() * 6 + 6;
+               piece.style.width = `${size}px`;
+               piece.style.height = `${size * 1.4}px`;
+               piece.style.left = `${Math.random() * 100}%`;
+               piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+               piece.style.animationDuration = `${Math.random() * 2 + 2.5}s`;
+               piece.style.animationDelay = `${Math.random() * 0.5}s`;
+               confetti.appendChild(piece);
+           }
+           setTimeout(() => {
+               confetti.classList.add("hidden");
+               confetti.innerHTML = "";
+           }, 5200);
+       }
+
+       textMe.addEventListener("click",()=> {
+           hideButtonsShowFinal();
+           result.textContent = "https://wa.me/14196806016";
+           finalImages.innerHTML = `
+               <img src="IMG_1498.JPG" alt="see??? ur way happier w me">
+               `;
+           finalImages.classList.remove("hidden");
+           runConfetti();
+       });
+       lame.addEventListener("click",()=> {
+           hideButtonsShowFinal();
+           result.textContent = "sorry, was this too romantic??";
+           finalImages.innerHTML = `
+               <img src="IMG_1498.JPG" alt="ur still happier w me nice try">
+           `;
+           finalImages.classList.remove("hidden");
+       });
+
+       const DODGE_DISTANCE = 90;
+       noBtn.addEventListener("mousemove", (e) =>{
+           if(landing.classList.contains("hidden")) return;
+
+           const rect = noBtn.getBoundingClientRect();
+           const mouseX = e.clientX;
+           const mouseY = e.clientY;
+           const centerX = rect.left + rect.width / 2;
+           const centerY = rect.top + rect.height / 2;
+           const dx = mouseX - centerX;
+           const dy = mouseY - centerY;
+           const dist = Math.hypot(dx,dy);
+           if (dist < 80){
+               const angle = Math.atan2(dy,dx);
+               const moveX = Math.cos(angle) * -DODGE_DISTANCE;
+               const moveY = Math.sin(angle) * -DODGE_DISTANCE;
+               noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+           }
+       });
+       noBtn.addEventListener("mouseleave",()=>{
+           noBtn.style.transform ="";
+       });
+    </script>
+    </body>
+</html>
